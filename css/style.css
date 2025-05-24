@@ -1,0 +1,31 @@
+body {
+    background-color: #111;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #222;
+    gap: 20px;
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  canvas {
+    background-color: #000;
+    margin-top: 20px;
+    border: 2px solid white;
+  }
+  
+  #textInput {
+    position: absolute;
+    top: -100px;
+  }
