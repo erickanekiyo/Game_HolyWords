@@ -1,7 +1,8 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const startButton = document.getElementById("startButton");
-const input = document.getElementById("textInput");
+const intro = document.getElementById("intro");
+const input = document.getElementById("input");
+const startBtn = document.getElementById("startBtn");
 
 let words = ["salvation", "light", "hope", "cross", "prayer", "holy"];
 let enemy = null;
@@ -43,6 +44,11 @@ function drawEnemy(enemy) {
 //Animação (frames)
 function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); //Limpa o canvas
+    //Pontuação
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "left";
+    ctx.fillText("Score: " + score, 10, 30);
 
     if (enemy && enemy.alive) {
         drawEnemy(enemy);
@@ -111,9 +117,13 @@ input.addEventListener("keydown", (e) => {
 });
 
 
-//Quando o jogador clica em "Iniciar Jogo"
-startButton.addEventListener("click", () => {
-    input.focus();            //Faz iniciar com caixa de texto ativada
-    enemy = newEnemy();       //Cria o primeiro inimigo
-    updateGame();             //Inicia o loop do jogo
+//Iniciar Jogo
+startBtn.addEventListener("click", () => {
+    intro.style.display = "none";
+    canvas.style.display = "block";         // Mostra o canvas
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    input.focus();                          //Faz iniciar com caixa de texto ativada
+    enemy = newEnemy();                     //Cria o primeiro inimigo
+    updateGame();                           //Inicia o loop do jogo
 });

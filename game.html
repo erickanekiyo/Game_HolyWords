@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Título da Página</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título da Página</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Menu Navegação-->
+    <nav>
+        <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="devs.html">Desenvolvedores</a></li>
+            <li><a href="game.html">Jogo</a></li>
+        </ul>
+    </nav>
 </head>
+
 <body>
-
-  <!-- Menu Navegação-->
-  <nav>
-    <ul>
-      <li><a href="index.html">Início</a></li>
-      <li><a href="devs.html">Desenvolvedores</a></li>
-      <li><a href="game.html">Jogo</a></li>
-    </ul>
-  </nav>
-
-  <!-- MAIN-->
-  <main>
-    <button id="startButton">Iniciar Jogo</button>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <input type="text" id="textInput" autocomplete="off" autofocus />
-  </main>
-
-  <script src="js/game.js"></script>
-
+    <div id="intro">
+        <h1>HOLYWORDS</h1>
+        <button id="startBtn">Iniciar</button>
+    </div>
+    
+    <canvas id="gameCanvas"></canvas>
+    <input id="input" type="text" autocomplete="off" />
+    
+    <script src="js/game.js"></script>
 </body>
 </html>
