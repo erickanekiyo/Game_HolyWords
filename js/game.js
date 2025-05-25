@@ -5,21 +5,24 @@ const input = document.getElementById("input");
 const startBtn = document.getElementById("startBtn");
 
 let words = ["salvation", "light", "hope", "cross", "prayer", "holy"];
-let enemy = null;
+let enemies = [];
 let score = 0;
 
 //Objeto do inimigo com palavra aleatoria
 function newEnemy() {
     const word = words[Math.floor(Math.random() * words.length)];
-    return {
+    const margin = 50;
+    const x = Math.random() * (canvas.width - margin * 2) + margin;
+
+    enemies.push({
         word: word,
-        size: 20,               //Tamanho inicial do inimigo
-        x: canvas.width / 2,    //Localização de spawn
+        size: 20,       //Tamanho inicial do inimigo
+        x: x,           //Localização de spawn
         y: canvas.height / 2,
         alive: true,
-        progress: 0,            //Letras digitadas corretamente
-        error: false            //Sinalizar ter errado a escrita
-    };
+        progress: 0,    //Letras digitadas corretamente
+        error: false    //Sinalizar ter errado a escrita
+    });
 }
 
 //Gera o inimigo na tela
@@ -44,78 +47,84 @@ function drawEnemy(enemy) {
 //Animação (frames)
 function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); //Limpa o canvas
-    //Pontuação
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.textAlign = "left";
-    ctx.fillText("Score: " + score, 10, 30);
-
-    if (enemy && enemy.alive) {
+    
+    
+    for (const enemy of enemies) {
+        if (!enemy.alive) continue;  //Se morto continue
         drawEnemy(enemy);
-        enemy.size += 0.5; //"Aproximação" do inimigo (efeito zoom)
+        enemy.size += 0.2;           //"Aproximação" do inimigo (efeito zoom)
 
         //Condição de Derrota
         if (enemy.size > 200) {
-            alert("Voce foi possuido! Pontuacao: " + score);
-            enemy = null;
+            alert("Você foi possuído! Pontuação: " + score);
+            enemies = [];
             score = 0;
             input.value = "";
             return;
         }
     }
-
     requestAnimationFrame(updateGame); //Geração de loop
 }
 
 //Mecanica de escrita
 input.addEventListener("input", () => {
-    //Se morto inimigo, retorna
-    if (!enemy || !enemy.alive) return;
-    
     //Pega o valor atual digitado pelo jogador para comparação de localização
     const value = input.value;
-  
-    
-    const expectedChar = enemy.word[enemy.progress];    //Letra esperada a ser escrita
-    const typedChar = value[value.length - 1];          //Ultima letra digitada
+    if (!value) return;
 
-    //Verificação se está correto o caractere
-    if (typedChar === expectedChar) {
-        enemy.progress++;
-        enemy.error = false;
+    for (const enemy of enemies) {
+        if (!enemy.alive) continue;
 
-        //Verificação para morte do inimigo
-        if (enemy.progress === enemy.word.length) {
-            enemy.alive = false;
-            score++;
-            input.value = "";
-            setTimeout(() => {      //Temporizador para geração de inimigo atualmente
-                enemy = newEnemy();
-            }, 1000);
+        const expectedChar = enemy.word[enemy.progress];//Letra esperada a ser escrita
+        const typedChar = value[value.length - 1];//Ultima letra digitada
+
+        if (enemy.error) continue;
+
+        //Verificação se está correto o caractere
+        if (typedChar === expectedChar) {
+            enemy.progress++;
+            enemy.error = false;
+
+            //Verificação para morte do inimigo
+            if (enemy.progress === enemy.word.length) {
+                enemy.alive = false;
+                score++;
+                input.value = "";
+                
+                for (let i = 0; i < (Math.random() * (3 - 1) + 1); i++) {       //Cria inimigos
+                    setTimeout(() => {                                          //Temporizador para geração de inimigo
+                        newEnemy();
+                    }, Math.random() * 1000);
+                }
+            }
+            return; //Só ataca um inimigo por vez
+        } else {
+            //Trava input(não aceita mais letras), pisca e espera backspace
+            enemy.error = true;
+            return;
         }
-    } else {
-        //Trava input(não aceita mais letras), pisca e espera backspace
-        enemy.error = true;
     }
 });
 
 //Mecanica quando erra uma escrita
 input.addEventListener("keydown", (e) => {
-    if (!enemy || !enemy.alive) return;
-  
-    if (enemy.error) {
-        //Permitir apagar e resetar
-        if (e.key === "Backspace") {
-            enemy.error = false;
-            enemy.progress = 0;
-            input.value = "";
-        } else {
-            //Bloqueia outras teclas
-            e.preventDefault();
+    for (const enemy of enemies) {
+        if (!enemy.alive) continue;
+
+        if (enemy.error) {
+            //Permitir apagar e resetar
+            if (e.key === "Backspace") {
+                enemy.error = false;
+                enemy.progress = 0;
+                input.value = "";
+            } else {
+                //Bloqueia outras teclas
+                e.preventDefault();
+            }
+            return;
         }
     }
 });
-
 
 //Iniciar Jogo
 startBtn.addEventListener("click", () => {
@@ -124,6 +133,10 @@ startBtn.addEventListener("click", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     input.focus();                          //Faz iniciar com caixa de texto ativada
-    enemy = newEnemy();                     //Cria o primeiro inimigo
+    for (let i = 0; i < 3; i++) {           //Cria os primeiros inimigos
+        setTimeout(() => {                  //Temporizador para geração de inimigos
+            newEnemy();
+        }, i * 1000);
+    }
     updateGame();                           //Inicia o loop do jogo
 });
