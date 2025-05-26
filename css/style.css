@@ -7,7 +7,6 @@ body {
 }
   
 #gameCanvas {
-    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -22,6 +21,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     background: red;
+    font-family: 'Press Start 2P', cursive;
     color: white;
     padding: 2rem;
     border-radius: 1rem;
@@ -31,7 +31,8 @@ body {
   
 #intro button {
     margin-top: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1rem;
+    font-family: 'Press Start 2P', cursive;
     font-size: 1.1rem;
     border: none;
     border-radius: 0.5rem;
@@ -44,7 +45,6 @@ body {
 #input {
     position: absolute;
     opacity: 0;
-    pointer-events: none;
 }
   
 nav ul {
